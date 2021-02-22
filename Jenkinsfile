@@ -11,15 +11,15 @@ pipeline {
 
     // 定义本次构建使用哪个标签的构建环境，本示例中为 “slave-pipeline”
     agent {
-        node{
-            label 'slave-pipeline'
-        }
+//        node{
+//            label 'slave-pipeline'
+//        }
 
         kubernetes { // 连接k8s，并利用yamlFile创建jenkins slave
             cloud 'kubernetes' //cloud关联
             label 'slave-pipeline' //label一定要写
-            // defaultContainer 'python36' //  stages和post步骤中默认用到的container。如需指定其他container，可用语法 container("java8"){...}
-            idleMinutes 10 //所创建的pod在job结束后直到销毁前的等待时间
+            defaultContainer 'slave-pipeline' //  stages和post步骤中默认用到的container。如需指定其他container，可用语法 container("java8"){...}
+            // idleMinutes 10 //所创建的pod在job结束后直到销毁前的等待时间
             // yamlFile "jenkins/jenkins_pod_template.yaml" // 指定创建pod时的yaml配置文件
         }
 
