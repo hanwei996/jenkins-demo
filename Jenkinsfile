@@ -51,41 +51,36 @@ pipeline {
         }
 
 
-
-
-         stage('Deploy to Kubernetes') {
-             parallel {
-                 stage('Deploy to Production Environment') {
-                     when {
-                         expression {
-                             "${BRANCH}" == "serverless"
-                         }
-                     }
+        stage('Deploy to Kubernetes') {
+            parallel {
+                stage('Deploy to Production Environment') {
+                    when {
+                        expression {
+                            "${BRANCH}" == "serverless"
+                        }
+                    }
+                    steps {
+                        kubernetesDeploy(enableConfigSubstitution: true, kubeconfigId: 'k8scloud', configs: 'deployment.yaml')
+                    }
 
 //                     steps {
 //                         container('kubectl') {
 //                             step([$class: 'KubernetesDeploy',  apiServerUrl: '${API_SERVER_URL}', credentialsId: '7774c063-347d-4ab0-98a6-7318fe6df8e8', config: 'deployment.yaml', variableState: 'ORIGIN_REPO,REPO,IMAGE_TAG'])
 //                         }
 //                     }
-                     stage('deploy to kubesphere') {
-                         steps {
-                             kubernetesDeploy(enableConfigSubstitution: true, kubeconfigId: 'k8scloud', configs: 'deployment.yaml')
-                         }
-                     }
-                 }
-                 stage('Deploy to Staging001 Environment') {
-                     when {
-                         expression {
-                             "${BRANCH}" == "latest"
-                         }
-                     }
-                     stage('deploy to kubesphere') {
-                         steps {
-                             kubernetesDeploy(enableConfigSubstitution: true, kubeconfigId: 'k8scloud', configs: 'deployment.yaml')
-                         }
-                     }
-                 }
-             }
-         }
+                }
+
+                stage('Deploy to pre Environment') {
+                    when {
+                        expression {
+                            "${BRANCH}" == "latest"
+                        }
+                    }
+                    steps {
+                        kubernetesDeploy(enableConfigSubstitution: true, kubeconfigId: 'k8scloud', configs: 'deployment.yaml')
+                    }
+                }
+            }
+        }
     }
 }
