@@ -53,7 +53,7 @@ pipeline{
                     }
                     steps {
 			container('kubectl') {
-				step([$class: 'KubernetesDeploy', authMethod: 'certs', apiServerUrl: '$API_SERVER_URL', credentialsId:'7774c063-347d-4ab0-98a6-7318fe6df8e8', config: 'deployment.yaml',variableState: 'ORIGIN_REPO,REPO,IMAGE_TAG'])
+				step([$class: 'KubernetesDeploy', apiServerUrl: '$API_SERVER_URL', credentialsId:'7774c063-347d-4ab0-98a6-7318fe6df8e8', config: 'deployment.yaml',variableState: 'ORIGIN_REPO,REPO,IMAGE_TAG'])
 			}
                     }
                 }
@@ -65,7 +65,7 @@ pipeline{
                     }
                     steps {
 			container('kubectl') {
-				step([$class: 'KubernetesDeploy', authMethod: 'certs', apiServerUrl: '$API_SERVER_URL', credentialsId:'7774c063-347d-4ab0-98a6-7318fe6df8e8', config: 'deployment.yaml',variableState: 'ORIGIN_REPO,REPO,IMAGE_TAG'])
+				step([$class: 'KubernetesDeploy',  apiServerUrl: '$API_SERVER_URL', credentialsId:'7774c063-347d-4ab0-98a6-7318fe6df8e8', config: 'deployment.yaml',variableState: 'ORIGIN_REPO,REPO,IMAGE_TAG'])
 			}
                     }
                 }
