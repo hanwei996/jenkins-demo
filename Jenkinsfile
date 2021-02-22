@@ -19,34 +19,34 @@ podTemplate(label: label, cloud: 'kubernetes') {
                     sh "kaniko -f `pwd`/Dockerfile -c `pwd` --destination=registry.cn-hangzhou.aliyuncs.com/ad_test/jenkins-demo:serverless"
                 }
         }
-
-        stage('Deploy to Kubernetes') {
-            parallel {
-                stage('Deploy to Production Environment') {
-                    when {
-                        expression {
-                            "$BRANCH" == "serverless"
-                        }
-                    }
-                    steps {
-                        container('kubectl') {
-                            step([$class: 'KubernetesDeploy', apiServerUrl: 'https://kubernetes.default:6443', credentialsId: '7774c063-347d-4ab0-98a6-7318fe6df8e8', config: 'deployment.yaml', variableState: 'ORIGIN_REPO,REPO,IMAGE_TAG'])
-                        }
-                    }
-                }
-                stage('Deploy to Staging001 Environment') {
-                    when {
-                        expression {
-                            "$BRANCH" == "latest"
-                        }
-                    }
-                    steps {
-                        container('kubectl') {
-                            step([$class: 'KubernetesDeploy', apiServerUrl: 'https://kubernetes.default:6443', credentialsId: '7774c063-347d-4ab0-98a6-7318fe6df8e8', config: 'deployment.yaml', variableState: 'ORIGIN_REPO,REPO,IMAGE_TAG'])
-                        }
-                    }
-                }
-            }
-        }
+//
+//        stage('Deploy to Kubernetes') {
+//            parallel {
+//                stage('Deploy to Production Environment') {
+//                    when {
+//                        expression {
+//                            "$BRANCH" == "serverless"
+//                        }
+//                    }
+//                    steps {
+//                        container('kubectl') {
+//                            step([$class: 'KubernetesDeploy', apiServerUrl: 'https://kubernetes.default:6443', credentialsId: '7774c063-347d-4ab0-98a6-7318fe6df8e8', config: 'deployment.yaml', variableState: 'ORIGIN_REPO,REPO,IMAGE_TAG'])
+//                        }
+//                    }
+//                }
+//                stage('Deploy to Staging001 Environment') {
+//                    when {
+//                        expression {
+//                            "$BRANCH" == "latest"
+//                        }
+//                    }
+//                    steps {
+//                        container('kubectl') {
+//                            step([$class: 'KubernetesDeploy', apiServerUrl: 'https://kubernetes.default:6443', credentialsId: '7774c063-347d-4ab0-98a6-7318fe6df8e8', config: 'deployment.yaml', variableState: 'ORIGIN_REPO,REPO,IMAGE_TAG'])
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
 }
