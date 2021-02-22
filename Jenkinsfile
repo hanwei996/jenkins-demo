@@ -7,18 +7,22 @@ podTemplate(label: label, cloud: 'kubernetes') {
         }
 
         // 添加第二个stage， 运行源码打包命令
-        stage('Package') {
-                container("maven") {
-                    sh "mvn package -B -DskipTests"
-                }
+        container('maven') {
+            stage('maven build') {
+                sh 'mvn clean package -s /home/jenkins/settings/settings.xml'
+            }
+//            stage('docker build') {
+//                sh 'cd springboot_demo && mvn docker:build'
+//            }
         }
 
         // 添加第三个stage, 运行容器镜像构建和推送命令， 用到了environment中定义的groovy环境变量
-        stage('Image Build And Publish') {
-                container("kaniko") {
-                    sh "kaniko -f `pwd`/Dockerfile -c `pwd` --destination=registry.cn-hangzhou.aliyuncs.com/ad_test/jenkins-demo:serverless"
-                }
+        container('kaniko') {
+            stage('Image Build And Publish') {
+                sh "kaniko -f `pwd`/Dockerfile -c `pwd` --destination=registry.cn-hangzhou.aliyuncs.com/ad_test/jenkins-demo:serverless"
+            }
         }
+
 //
 //        stage('Deploy to Kubernetes') {
 //            parallel {
