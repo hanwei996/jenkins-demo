@@ -18,9 +18,9 @@ pipeline {
             idleMinutes 10 //所创建的pod在job结束后直到销毁前的等待时间
             // yamlFile "jenkins/jenkins_pod_template.yaml" // 指定创建pod时的yaml配置文件
         }
-//            node{
-//              label 'slave-pipeline'
-//            }
+        node{
+             label 'slave-pipeline'
+          }
     }
 
     // "stages"定义项目构建的多个模块，可以添加多个 “stage”， 可以多个 “stage” 串行或者并行执行
